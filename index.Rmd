@@ -1,0 +1,35 @@
+---
+title: "R Markdown and Leaflet Assignment"
+author: "Javier Angoy"
+date: "November 8, 2017"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Data comes from [here](http://datosabiertos.rivasciudad.es/dataset/7a798103-d529-42ed-8946-7edd4d10c7f5/resource/92e323c7-3507-4097-bd58-ce8e61750690/download/antenaswifi.csv). It contains wifi spots from Rivas-Vaciamadrid (Spain) .
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(leaflet)
+
+if(!file.exists("./data")){
+    dir.create("./data")
+    fUrl <- "http://datosabiertos.rivasciudad.es/dataset/7a798103-d529-42ed-8946-7edd4d10c7f5/resource/92e323c7-3507-4097-bd58-ce8e61750690/download/antenaswifi.csv"
+    download.file(fUrl, destfile = "./data/antenaswifi.csv", method = "auto")
+}
+data = read.csv("./data/antenaswifi.csv",na.strings = c("","NA"))
+
+wfIcon <- makeIcon(
+  iconUrl = "http://simpleicon.com/wp-content/uploads/wifi1.png",
+  iconWidth = 31*215/230, iconHeight = 31,
+  iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+df <- data.frame(lat = data$LAT,
+                 lng = data$LON,
+                 pop = data$DIRECCION ,
+                 str = runif(111, min = 1, max = 100))
+df %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = wfIcon,popup=df$pop)
+```
