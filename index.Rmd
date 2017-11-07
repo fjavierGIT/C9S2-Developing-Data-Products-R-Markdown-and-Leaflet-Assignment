@@ -7,7 +7,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Data comes from [here](http://datosabiertos.rivasciudad.es/dataset/7a798103-d529-42ed-8946-7edd4d10c7f5/resource/92e323c7-3507-4097-bd58-ce8e61750690/download/antenaswifi.csv). It contains wifi spots from Rivas-Vaciamadrid (Spain) .
+111 wifi spots from Rivas-Vaciamadrid (Spain).
+Data comes from [here](http://datosabiertos.rivasciudad.es/dataset/7a798103-d529-42ed-8946-7edd4d10c7f5/resource/92e323c7-3507-4097-bd58-ce8e61750690/download/antenaswifi.csv).
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(leaflet)
@@ -26,10 +27,9 @@ wfIcon <- makeIcon(
 )
 df <- data.frame(lat = data$LAT,
                  lng = data$LON,
-                 pop = data$DIRECCION ,
-                 str = runif(111, min = 1, max = 100))
+                 pop = data$DIRECCION)
 df %>% 
   leaflet() %>%
   addTiles() %>%
-  addMarkers(icon = wfIcon,popup=df$pop)
+  addMarkers(icon = wfIcon,popup=df$pop,clusterOptions = markerClusterOptions())
 ```
